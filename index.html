@@ -7,78 +7,79 @@
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
 
 <script>
-function LetraGrande() {
-  document.getElementById("parrafo").style.fontSize = "30px";
-}
-function LetraNormal() {
-  document.getElementById("parrafo").style.fontSize = "16px";
+let x = 20;
+
+function Teclas(e) {
+  if (e.target.type == "text") {
+    return;
+  }
+  let dino = document.getElementById("dino");
+  if (e.code == "ArrowRight") {
+    x = x + 20;
+  }
+  if (e.code == "ArrowLeft") {
+    x = x - 20;
+  }
+  if (e.code == "Space") {
+    e.preventDefault();
+    x = x + 60;
+    dino.style.bottom = "100px";
+    setTimeout(function () { dino.style.bottom = "0px"; }, 300);
+  }
+  dino.style.left = x + "px";
 }
 
 function AgregarLista() {
-  let texto = document.getElementById("cajaLista").value;
-  document.getElementById("lista").innerHTML += "<li>" + texto + "</li>";
+  let li = document.createElement("li");
+  li.innerHTML = document.getElementById("txt").value;
+  document.getElementById("lista").appendChild(li);
 }
 
 function AgregarFila() {
-  let nombre = document.getElementById("cajaNombre").value;
-  let edad = document.getElementById("cajaEdad").value;
-  document.getElementById("tabla").innerHTML += "<tr><td>" + nombre + "</td><td>" + edad + "</td></tr>";
-}
-function BordeGrueso() {
-  document.getElementById("tabla").style.border = "6px solid blue";
-}
-
-function MoverDino() {
-  document.getElementById("dino").style.position = "relative";
-  document.getElementById("dino").style.left = "200px";
-}
-function RegresarDino() {
-  document.getElementById("dino").style.left = "0px";
-}
-
-function MostrarTexto() {
-  document.getElementById("eco").innerHTML = "Escribiste: " + document.getElementById("cajaEco").value;
+  let fila = document.getElementById("tabla").insertRow(-1);
+  fila.insertCell(0).innerHTML = document.getElementById("nombre").value;
+  fila.insertCell(1).innerHTML = document.getElementById("edad").value;
 }
 </script>
 </head>
 
-<body onload="document.body.style.backgroundColor = 'lightyellow'">
+<body onload="document.body.style.backgroundColor = 'lightyellow'" onkeydown="Teclas(event)">
 
-<h1 id="titulo" onmouseover="document.getElementById('titulo').style.color = 'red'" onmouseout="document.getElementById('titulo').style.color = 'black'">Trabajo 2: DOM</h1>
+<h1 onmouseover="this.style.color = 'red'" onmouseout="this.style.color = 'black'">Trabajo 2: DOM</h1>
 <p id="parrafo">Este párrafo cambia de tamaño con los botones.</p>
-<input type="button" value="Letra grande" onclick="LetraGrande()">
-<input type="button" value="Letra normal" onclick="LetraNormal()">
+<input type="button" value="Letra grande" onclick="document.getElementById('parrafo').style.fontSize = '30px'">
+<input type="button" value="Letra normal" onclick="document.getElementById('parrafo').style.fontSize = '16px'">
 
 <h2>Lista</h2>
 <ul id="lista">
   <li>Manzana</li>
 </ul>
-<input id="cajaLista" type="text">
+<input id="txt" type="text">
 <input type="button" value="Agregar" onclick="AgregarLista()">
 
 <h2>Enlace</h2>
-<a id="enlace" href="https://www.google.com" onmouseover="document.getElementById('enlace').style.color = 'green'" onmouseout="document.getElementById('enlace').style.color = 'blue'">Ir a Google</a>
-
-<h2>Imagen</h2>
-<img id="dino" src="dino.jpg" width="80" onmouseover="document.getElementById('dino').style.width = '120px'" onmouseout="document.getElementById('dino').style.width = '80px'">
-<br>
-<input type="button" value="Mover" onclick="MoverDino()">
-<input type="button" value="Regresar" onclick="RegresarDino()">
+<a href="https://www.google.com" onmouseover="this.style.color = 'green'" onmouseout="this.style.color = 'blue'">Ir a Google</a>
 
 <h2>Tabla</h2>
-<table id="tabla" border="2" onmouseover="document.getElementById('tabla').style.backgroundColor = 'yellow'" onmouseout="document.getElementById('tabla').style.backgroundColor = 'white'">
+<table id="tabla" border="2">
   <tr><th>Nombre</th><th>Edad</th></tr>
-  <tr><td>Ana</td><td>17</td></tr>
+  <tr onmouseover="this.style.backgroundColor = 'yellow'" onmouseout="this.style.backgroundColor = 'white'"><td>Ana</td><td>17</td></tr>
 </table>
 <br>
-<input id="cajaNombre" type="text" placeholder="Nombre">
-<input id="cajaEdad" type="text" placeholder="Edad" size="4">
+<input id="nombre" type="text" placeholder="Nombre">
+<input id="edad" type="text" placeholder="Edad" size="4">
 <input type="button" value="Agregar fila" onclick="AgregarFila()">
-<input type="button" value="Borde grueso" onclick="BordeGrueso()">
+<input type="button" value="Borde grueso" onclick="document.getElementById('tabla').style.border = '6px solid blue'">
 
-<h2>Formulario</h2>
-<input id="cajaEco" type="text" onkeyup="MostrarTexto()">
+<h2>Formulario con teclado</h2>
+<input type="text" onkeyup="document.getElementById('eco').innerHTML = 'Escribiste: ' + this.value">
 <p id="eco"></p>
+
+<h2>Dinosaurio</h2>
+<p>Flechas izquierda y derecha para moverlo. Barra espaciadora para saltar avanzando.</p>
+<div style="position:relative; height:150px; overflow:hidden; border-bottom:3px solid black;">
+  <img id="dino" src="dino.jpg" width="80" style="position:absolute; left:20px; bottom:0px; transition:0.3s;" onmouseover="this.style.width = '120px'" onmouseout="this.style.width = '80px'">
+</div>
 
 </body>
 </html>
